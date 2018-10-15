@@ -1,6 +1,6 @@
 {
   "name": "mail-merger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
   "main": "./dist/index.js",
   "scripts": {
