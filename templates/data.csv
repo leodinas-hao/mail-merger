@@ -1,0 +1,4 @@
+id,customer,items_.name,items_.price,contact,to,cc
+1,Customer A,Monitor,$200.00,John,john@sample.com,john1@sample.com
+1,Customer A,Keyboard,$50.00,John,john@sample.com,john1@sample.com
+2,Customer B,Laptop,"$2,000.00",Tim,tim@sample.com,tim1@sample.com

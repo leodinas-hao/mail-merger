@@ -1,0 +1,44 @@
+{
+  "name": "mail-merger",
+  "version": "1.0.0",
+  "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
+  "main": "./dist/index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "tslint ./src/**/*.ts -t verbose",
+    "compile:ts": "tsc",
+    "compile": "npm run clean && npm run lint && npm run compile:ts",
+    "prepack": "npm run compile",
+    "postinstall": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "mocha --colors --no-timeouts ./dist/**/*.spec.js",
+    "test:debug": "mocha --inspect=5858 --colors --no-timeouts --require ts-node/register ./src/**/*.spec.ts"
+  },
+  "author": "Leo Hao <leodinas.hao@gmail.com>",
+  "license": "MIT",
+  "bin": {
+    "mail-merger": "./bin/mail-merger"
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.8",
+    "dotenv": "^6.1.0",
+    "handlebars": "^4.0.12",
+    "lodash": "^4.17.11",
+    "nodemailer": "^4.6.8",
+    "yargs": "^12.0.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/handlebars": "^4.0.39",
+    "@types/lodash": "^4.14.117",
+    "@types/nodemailer": "^4.6.5",
+    "@types/yargs": "^12.0.1",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mocha-typescript": "^1.1.17",
+    "rimraf": "^2.6.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.3"
+  }
+}
