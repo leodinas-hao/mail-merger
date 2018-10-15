@@ -1,6 +1,6 @@
 {
   "name": "mail-merger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
   "main": "./dist/index.js",
   "scripts": {
@@ -19,6 +19,11 @@
   "bin": {
     "mail-merger": "./bin/mail-merger"
   },
+  "keywords": [
+    "mail merge",
+    "generate email",
+    "email template"
+  ],
   "dependencies": {
     "csvtojson": "^2.0.8",
     "dotenv": "^6.1.0",
