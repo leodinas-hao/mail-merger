@@ -12,18 +12,6 @@ export async function cli(args: string | string[]) {
   const yargs = Yargs
     .usage(`Usage: $0 [options]`)
     .options({
-      user: {
-        alias: 'u',
-        describe: 'user name of smtp email account',
-        type: 'string',
-        group: 'smtp',
-      },
-      pass: {
-        alias: 'p',
-        describe: 'password of smtp email account',
-        type: 'string',
-        group: 'smtp',
-      },
       smtp: {
         describe: 'connection url of the smtp server',
         type: 'string',
@@ -84,16 +72,7 @@ export async function cli(args: string | string[]) {
   // parse args
   const argv = yargs.parse(args);
 
-  const url = argv['smtp'] || defaults.url;
-  const smpt = _.merge({}, defaults.smtp);
-  if (argv['user']) {
-    smpt.auth.user = argv['user'];
-  }
-  if (argv['pass']) {
-    smpt.auth.user = argv['pass'];
-  }
-
-  const mm = new MailMerger(url, smpt);
+  const mm = new MailMerger(argv['smtp'] ? { smtp: argv['smtp'] } : undefined);
   const mail = {
     from: argv['from'] || defaults.mail.from,
     to: argv['to'] || defaults.mail.to,
@@ -102,10 +81,17 @@ export async function cli(args: string | string[]) {
     subject: argv['subject'] || defaults.mail.subject,
   };
 
-  const count = await mm.send(
+  const summary = await mm.send(
     argv['context'],
     { html: argv['template'], attachments: argv['attachments'] },
-    mail);
+    mail,
+  );
 
-  console.log(`Total of ${count} emails have been sent.`);
+  console.info(`[${summary.sent}] out of [${summary.total}] emails were sent out successfully!`);
+  if (summary.failures && summary.failures.length > 0) {
+    console.error(`The following messages could not be delivered:`);
+    for (const f of summary.failures) {
+      console.error(`${f.id}`);
+    }
+  }
 }

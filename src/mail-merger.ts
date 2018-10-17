@@ -13,21 +13,16 @@ export class MailMerger {
 
   /**
    * constructor
-   * @param {string} [url] smtp server connection url. Refer: https://nodemailer.com/smtp/
-   * @param {any} [opts] global options for the MailMerger. See `defaults` for details
+   * @param {string | any} [opts] global options for the MailMerger. See `defaults` for details. When string, consider it as smtp connection url
    */
-  public constructor(url?: string, opts?: any) {
-    if (url && !_.isString(url)) {
-      opts = url;
-      url = undefined;
-    }
+  public constructor(opts?: string | any) {
     if (opts) {
+      if (_.isString(opts)) {
+        opts = { smtp: opts };
+      }
       this.config = _.merge({}, this.config, opts);
     }
-    if (url) {
-      this.config.url = url;
-    }
-    this.transporter = createTransport(this.config.url, this.config.smtp);
+    this.transporter = createTransport(this.config.smtp);
   }
 
   /**
@@ -35,12 +30,12 @@ export class MailMerger {
    * @param {string | object} context of the emails, which can be an object or string. Accepts string: 1). path to a csv/json file; 2). json string
    * @param { html: string, attachments?: string[] } html string or path to a html file; attachments can be set by an array of file paths
    * @param {NodeMailer.SendMailOptions} can contain Handlebars templates
-   * @returns {Promise<number>} number of emails sent out
+   * @returns {Promise<{ total: number, sent: number, failures?: any[] }>} delivery summary with total number of mails in the delivery queue, number sent out & failures
    */
   public async send(
     context: string | object,
     template: { html: string, attachments?: string[] },
-    mail: { from?: string, to?: string, cc?: string, bcc?: string, subject?: string }): Promise<number> {
+    mail: { from?: string, to?: string, cc?: string, bcc?: string, subject?: string }): Promise<{ total: number, sent: number, failures?: any[] }> {
     const ctx = await this.getContext(context);
     const html = await this.readText(template.html);
     mail['html'] = html;
@@ -55,8 +50,15 @@ export class MailMerger {
       queue.push(this.sendMail(mail, c));
       count++;
     }
-    await Promise.all(queue);
-    return count;
+    const results = await Promise.all(queue);
+
+    this.transporter.close();
+
+    const total = count;
+    const sent = results.filter((val) => !!!val.error).length;
+    const failures = results.filter((val) => !!val.error).map((val) => val.id);
+
+    return { total, sent, failures };
   }
 
   private readText(path: string): Promise<string> {
@@ -91,15 +93,16 @@ export class MailMerger {
   }
 
   private parseCsv(csv: string): Promise<any> {
-    const csvKey = this.config.csv.key;
-    const indicator = this.config.csv.indicator;
+    const merge = this.config.context.merge;
+    const csvKey = this.config.context.key;
+    const indicator = this.config.context.arrayIndicator;
     const results = [];
 
     return new Promise((resolve, reject) => {
       Csv().fromString(csv)
         .subscribe((json) => {
           // only combine csv rows when both primary key (id) & the indicator set
-          if (csvKey && indicator) {
+          if (merge && csvKey && indicator) {
             // transform columns with array like headers to array
             _.keys(json).forEach((key) => {
               if (key.search(indicator) > -1) {
@@ -142,7 +145,8 @@ export class MailMerger {
     });
   }
 
-  private sendMail(mail: SendMailOptions, context: any): Promise<void> {
+  private sendMail(mail: SendMailOptions, context: any): Promise<{ id: any, error?: any, info?: any }> {
+    const key = this.config.context.key;
     // compile mail
     const m = {
       to: this.compile(mail.to as string, context),
@@ -154,7 +158,22 @@ export class MailMerger {
       attachments: mail.attachments,
     };
     // send mail
-    return this.transporter.sendMail(m);
+    // always resolve the promise and indicates the failures with error message in the return result
+    return new Promise((resolve, reject) => {
+      this.transporter.sendMail(m, (error, info) => {
+        if (error) {
+          resolve({
+            id: context[key] || m.to || m.subject,
+            error,
+          });
+        } else {
+          resolve({
+            id: context[key] || m.to || m.subject,
+            info,
+          });
+        }
+      });
+    });
   }
 
   private compile(template: string, context: any): string {

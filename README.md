@@ -12,7 +12,7 @@ Tool of mail merge, which takes {{mustache}} email templates and data from json 
 - Parse data defined in csv file and/or json as the context of emails
 - Merge/combine multiple lines of rows in csv into one big record with array properties
 - Use in your scripts and/or CLI
-- Supports `.env` file for security related settings (i.e. SMTP details, username & password)
+- Supports `.env` file for security related settings (i.e. SMTP connection url with your username & password)
 
 ## Installation
 ```
@@ -32,11 +32,11 @@ $ mail-merger -c=./data.csv -t=./sample.html -a=./img1.png -a=./img2.png
 import { MailMerger } from 'mail-merger';
 
 // refer to `defaults.ts` for all details of the options
-const merger = new MailMerger(smtp, opts);
+const merger = new MailMerger(opts);
 // refer to `mail-merger.spec.ts` for more details
-const count = await merger.send(context, template, mailOpts);
+const summary = await merger.send(context, template, mailOpts);
 
-console.log(`Total of ${count} emails have been sent.`);
+console.info(`[${summary.sent}] out of [${summary.total}] emails were sent out successfully!`);
 ```
 
 #### NOTE

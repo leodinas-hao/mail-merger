@@ -1,14 +1,7 @@
 import './env-loader';
 
 export const defaults = {
-  url: process.env.MM_SMTP, // url of smtp connection, can be placed in .env as MM_SMTP
-  smtp: {
-    pool: true,
-    auth: {
-      user: process.env.MM_USER, // should be placed in .env as MM_USER
-      pass: process.env.MM_PASS, // should be placed in .env as MM_PASS
-    },
-  },
+  smtp: process.env.MM_SMTP, // NodeMailer SMTP transport options or smtp server connection url. Refer: https://nodemailer.com/smtp/
   mail: {
     to: '{{to}}',
     from: '{{from}}',
@@ -16,7 +9,6 @@ export const defaults = {
     bcc: undefined, // '{{bcc}}',
     subject: '{{subject}}',
   },
-  // only when the both of the following being set, the csv parser will combine rows
   // this is helpful when you have parent-child relationship in your context data
   // i.e. multiple families in the household
   // id,familyName,members_
@@ -25,13 +17,9 @@ export const defaults = {
   // 2,JONES,JOHN
   // => [{id: 1, familyName: 'SMITH', members: ['JIM', 'TOM']},
   // =>  {id: 2, familyName: 'JONES', members: ['JOHN']}]
-  csv: {
-    key: 'id',  // acts like primary key, when multiple rows with the same key, they will be considered as one object
-    indicator: /_$/,  // indicates which columns should be considered as array, the indicator will be removed while parsing csv
+  context: {
+    key: 'id',  // name of the field which is unique (like PK in DB)
+    merge: true,  // when true, the csv parser will merge multiple rows with the same key to one record (send out in one email)
+    arrayIndicator: /_$/, // indicates which columns should be considered as array, the indicator will be removed while parsing csv
   },
 };
-
-// following is to overcome the bug of NodeMailer. `createTransport` complaints no auth information even when only use as defaults
-if (!defaults.smtp.auth.pass && !defaults.smtp.auth.user) {
-  delete defaults.smtp.auth;
-}
