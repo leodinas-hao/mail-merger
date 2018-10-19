@@ -1,3 +1,4 @@
+import Table = require('cli-table');
 import * as _ from 'lodash';
 import * as Yargs from 'yargs';
 
@@ -91,11 +92,17 @@ export async function cli(args: string | string[]) {
     mail,
   );
 
-  console.info(`[${summary.sent}] out of [${summary.total}] emails were sent out successfully!`);
+  let table = new Table({ head: ['Total', 'Sent', 'Failure'] });
+  table.push([summary.total, summary.sent, summary.failures ? summary.failures.length : 0]);
+  console.error('$mail-merger delivery summary:');
+  console.info(table.toString());
+
   if (summary.failures && summary.failures.length > 0) {
     console.error(`The following messages could not be delivered:`);
+    table = new Table({ head: ['Id', 'Error'] });
     for (const f of summary.failures) {
-      console.error(`${f.id}`);
+      table.push([f.id, f.error]);
     }
+    console.log(table.toString());
   }
 }

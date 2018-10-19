@@ -56,7 +56,7 @@ export class MailMerger {
 
     const total = count;
     const sent = results.filter((val) => !!!val.error).length;
-    const failures = results.filter((val) => !!val.error).map((val) => val.id);
+    const failures = results.filter((val) => !!val.error).map((val) => ({ id: val.id, error: val.error.message }));
 
     return { total, sent, failures };
   }
