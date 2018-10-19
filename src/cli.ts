@@ -10,7 +10,7 @@ export async function main() {
 
 export async function cli(args: string | string[]) {
   const yargs = Yargs
-    .usage(`Usage: $0 [options]`)
+    .usage(`Usage: mail-merger [options]`)
     .options({
       smtp: {
         describe: 'connection url of the smtp server',
@@ -41,16 +41,19 @@ export async function cli(args: string | string[]) {
         describe: 'from email',
         type: 'string',
         group: 'email',
+        default: defaults.mail.from,
       },
       to: {
         describe: 'to email(s)',
         type: 'string',
         group: 'email',
+        default: defaults.mail.to,
       },
       cc: {
         describe: `cc'd email(s)`,
         type: 'string',
         group: 'email',
+        default: defaults.mail.cc,
       },
       bcc: {
         describe: `bcc'd email(s)`,
@@ -62,6 +65,7 @@ export async function cli(args: string | string[]) {
         describe: 'email subject',
         type: 'string',
         group: 'email',
+        default: defaults.mail.subject,
       },
     })
     .version()

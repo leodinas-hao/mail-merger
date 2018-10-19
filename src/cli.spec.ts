@@ -19,4 +19,11 @@ class CliTester {
       `--bcc=sample@sampleonly.com`,
     ]);
   }
+
+  @test('should display help')
+  public async help() {
+    await cli([
+      '--help',
+    ]);
+  }
 }
