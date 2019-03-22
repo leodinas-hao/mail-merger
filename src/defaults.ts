@@ -18,7 +18,7 @@ export const defaults = {
   // => [{id: 1, familyName: 'SMITH', members: ['JIM', 'TOM']},
   // =>  {id: 2, familyName: 'JONES', members: ['JOHN']}]
   context: {
-    key: 'id',  // name of the field which is unique (like PK in DB)
+    key: process.env.MM_KEY || 'id',  // name of the field which is unique (like PK in DB). Default: `id` or set it by env file MM_KEY
     merge: true,  // when true, the csv parser will merge multiple rows with the same key to one record (send out in one email)
     arrayIndicator: /_$/, // indicates which columns should be considered as array, the indicator will be removed while parsing csv
   },
