@@ -20,6 +20,7 @@ class CliTester {
     ]);
   }
 
+  // @pending
   @test('should display help')
   public async help() {
     await cli([

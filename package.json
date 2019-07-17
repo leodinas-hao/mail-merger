@@ -1,6 +1,6 @@
 {
   "name": "mail-merger",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,8 +37,8 @@
     "cli-table": "^0.3.1",
     "csvtojson": "^2.0.8",
     "dotenv": "^6.1.0",
-    "handlebars": "^4.0.12",
-    "lodash": "^4.17.11",
+    "handlebars": "^4.1.2",
+    "lodash": "^4.17.14",
     "nodemailer": "^4.6.8",
     "yargs": "^12.0.2"
   },
