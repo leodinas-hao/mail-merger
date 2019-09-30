@@ -36,6 +36,7 @@ export async function cli(args: string | string[]) {
         alias: ['a'],
         describe: 'an array of file paths as email attachments',
         type: 'array',
+        string: true,
         group: 'email',
       },
       from: {
