@@ -1,0 +1,5 @@
+-u bdd
+--no-timeouts
+--colors
+--require ts-node/register/transpile-only
+src/**/*.spec.ts

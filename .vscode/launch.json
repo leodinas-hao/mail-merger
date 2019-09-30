@@ -12,13 +12,8 @@
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
-        "-u",
-        "tdd",
-        "--no-timeouts",
-        "--colors",
-        "--require",
-        "ts-node/register",
-        "${workspaceRoot}/src/**/*.spec.ts"
+        "--opts",
+        "mocha.opts"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     }

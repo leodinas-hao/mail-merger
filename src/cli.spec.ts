@@ -1,5 +1,4 @@
-import { assert } from 'chai';
-import { pending, suite, test } from 'mocha-typescript';
+import { pending, suite, test } from '@testdeck/mocha';
 
 import { cli } from './cli';
 

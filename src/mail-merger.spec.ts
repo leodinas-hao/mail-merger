@@ -1,5 +1,5 @@
+import { pending, suite, test } from '@testdeck/mocha';
 import { assert } from 'chai';
-import { pending, suite, test } from 'mocha-typescript';
 
 import { MailMerger } from './mail-merger';
 
@@ -8,11 +8,12 @@ class MailMergerTester {
   @pending
   @test('should sent email')
   public async sendEmail() {
-    const smtp = 'smtp://username:password@your_smtp_server:port/?pool=true&secure=false';
-    const merger = new MailMerger(smtp);
+    // ensure hare your smtp url in .env file "MM_SMTP"
+    const merger = new MailMerger();
 
-    // or place your smtp url into .env file "MM_SMTP", then init MailMerger as below
-    // const merger = new MailMerger();
+    // Or setup smtp inline here
+    // const smtp = 'smtp://username:password@your_smtp_server:port/?pool=true&secure=false';
+    // const merger = new MailMerger(smtp);
 
     const ctx = './templates/data.csv';
     const tmp = {
