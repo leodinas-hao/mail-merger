@@ -6,7 +6,7 @@ export const defaults = {
     to: '{{to}}',
     from: '{{from}}',
     cc: '{{cc}}',
-    bcc: undefined, // '{{bcc}}',
+    bcc: '{{bcc}}',
     subject: '{{subject}}',
   },
   // this is helpful when you have parent-child relationship in your context data

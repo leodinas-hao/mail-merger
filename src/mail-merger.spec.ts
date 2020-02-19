@@ -23,8 +23,7 @@ class MailMergerTester {
       ],
     };
     const mail = {
-      from: 'sample@sampleonly.com',
-      bcc: 'sample@sampleonly.com',
+      from: 'sample abc <sample@sampleonly.com>',
       subject: 'Test - from mail-merger [{{id}}]',
     };
 

@@ -14,12 +14,11 @@ class CliTester {
       `-t=./templates/sample.html`,
       `-a=./templates/tick.png`,
       `-s=Test - from mail-merger [{{id}}]`,
-      `--from=sample@sampleonly.com`,
-      `--bcc=sample@sampleonly.com`,
+      `--from=sample abc <sample@sampleonly.com>`,
     ]);
   }
 
-  // @pending
+  @pending
   @test('should display help')
   public async help() {
     await cli([
