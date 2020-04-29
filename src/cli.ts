@@ -61,6 +61,7 @@ export async function cli(args: string | string[]) {
         describe: `bcc'd email(s)`,
         type: 'string',
         group: 'email',
+        default: defaults.mail.bcc,
       },
       subject: {
         alias: 's',
@@ -68,6 +69,18 @@ export async function cli(args: string | string[]) {
         type: 'string',
         group: 'email',
         default: defaults.mail.subject,
+      },
+      merge: {
+        describe: 'indicate if to merge csv rows',
+        type: 'boolean',
+        default: defaults.context.merge,
+        group: 'merging',
+      },
+      key: {
+        describe: 'indicate which field is the key for csv row merging',
+        type: 'string',
+        default: defaults.context.key,
+        group: 'merging',
       },
     })
     .version()
@@ -78,19 +91,28 @@ export async function cli(args: string | string[]) {
   // parse args
   const argv = yargs.parse(args);
 
-  const mm = new MailMerger(argv['smtp'] ? { smtp: argv['smtp'] } : undefined);
   const mail = {
-    from: argv['from'] || defaults.mail.from,
-    to: argv['to'] || defaults.mail.to,
-    cc: argv['cc'] || defaults.mail.cc,
-    bcc: argv['bcc'] || defaults.mail.bcc,
-    subject: argv['subject'] || defaults.mail.subject,
+    from: argv['from'],
+    to: argv['to'],
+    cc: argv['cc'],
+    bcc: argv['bcc'],
+    subject: argv['subject'],
   };
+
+  const opts = {
+    smtp: argv['smtp'] || undefined,
+    mail,
+    context: {
+      key: argv['key'],
+      merge: argv['merge'],
+    },
+  };
+
+  const mm = new MailMerger(opts);
 
   const summary = await mm.send(
     argv['context'],
     { html: argv['template'], attachments: argv['attachments'] },
-    mail,
   );
 
   let table = new Table({ head: ['Total', 'Sent', 'Failure'] });

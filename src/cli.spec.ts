@@ -15,6 +15,8 @@ class CliTester {
       `-a=./templates/tick.png`,
       `-s=Test - from mail-merger [{{id}}]`,
       `--from=sample abc <sample@sampleonly.com>`,
+      `--no-merge`,
+      `--key=id`,
     ]);
   }
 

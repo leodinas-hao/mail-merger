@@ -35,14 +35,14 @@ export class MailMerger {
   public async send(
     context: string | object,
     template: { html: string, attachments?: string[] },
-    mail: { from?: string, to?: string, cc?: string, bcc?: string, subject?: string }): Promise<{ total: number, sent: number, failures?: any[] }> {
+    mail?: { from?: string, to?: string, cc?: string, bcc?: string, subject?: string }
+  ): Promise<{ total: number, sent: number, failures?: any[] }> {
     const ctx = await this.getContext(context);
     const html = await this.readText(template.html);
-    mail['html'] = html;
-    mail = _.merge({}, this.config.mail, mail);
-    if (template.attachments && template.attachments.length > 0) {
-      mail['attachments'] = this.prepareAttachments(template.attachments);
-    }
+    const attachments = this.prepareAttachments(template.attachments);
+
+    mail = _.merge({}, this.config.mail, { html, attachments }, mail);
+
     const arr = _.isArray(ctx) ? ctx : [ctx];
     let count = 0;
     const queue = [];
@@ -99,7 +99,7 @@ export class MailMerger {
     const results = [];
 
     return new Promise((resolve, reject) => {
-      Csv().fromString(csv)
+      Csv({ checkType: true, ignoreEmpty: true }).fromString(csv)
         .subscribe((json) => {
           // only combine csv rows when both primary key (id) & the indicator set
           if (merge && csvKey && indicator) {
@@ -112,7 +112,7 @@ export class MailMerger {
             });
             // check if duplicated item found based on the primary key field
             const found = _.find(results, (r) => {
-              return r[csvKey] === json[csvKey];
+              return r[csvKey] != null && r[csvKey] === json[csvKey];
             });
             if (found) {
               // merge with concat array items
@@ -136,7 +136,7 @@ export class MailMerger {
   }
 
   private prepareAttachments(arr: string[]): any[] {
-    return arr.map((p) => {
+    return arr?.map((p) => {
       return {
         filename: Path.basename(p),
         path: Path.resolve(p),
