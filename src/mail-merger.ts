@@ -61,6 +61,17 @@ export class MailMerger {
     return { total, sent, failures };
   }
 
+  /**
+   * remove BOM in UTF-8
+   * @param str
+   */
+  private removeBom(str) {
+    if (str?.charCodeAt(0) === 0xFEFF) {
+      return str.slice(1);
+    }
+    return str;
+  }
+
   private readText(path: string): Promise<string> {
     const resolvedPath = Path.resolve(path);
     if (Fs.existsSync(resolvedPath)) {
@@ -69,7 +80,7 @@ export class MailMerger {
           if (err) {
             reject(err);
           } else {
-            resolve(str);
+            resolve(this.removeBom(str));
           }
         });
       });
