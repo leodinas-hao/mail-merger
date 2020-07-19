@@ -1,6 +1,6 @@
 {
   "name": "mail-merger",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -36,25 +36,25 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "handlebars": "^4.7.6",
-    "lodash": "^4.17.15",
-    "nodemailer": "^6.4.6",
-    "yargs": "^15.3.1"
+    "lodash": "^4.17.19",
+    "nodemailer": "^6.4.10",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@testdeck/mocha": "0.0.10",
+    "@testdeck/mocha": "0.1.0",
     "@types/chai": "^4.2.11",
     "@types/cli-table": "^0.3.0",
     "@types/handlebars": "^4.1.0",
-    "@types/lodash": "^4.14.149",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.4",
+    "@types/lodash": "^4.14.157",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.23",
     "@types/nodemailer": "^6.4.0",
-    "@types/yargs": "^15.0.4",
+    "@types/yargs": "^15.0.5",
     "chai": "^4.2.0",
-    "mocha": "^7.1.2",
+    "mocha": "^8.0.1",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.7"
   }
 }
