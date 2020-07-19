@@ -1,6 +1,6 @@
 {
   "name": "mail-merger",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Tool of mail merge, which takes {{mustache}} email templates and data from json or csv to generate and bulk send emails",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "compile": "npm run clean && npm run lint && npm run compile:ts",
     "prepack": "npm run compile",
     "prepublishOnly": "npm run compile",
-    "test": "mocha --opts ./mocha.opts"
+    "test": "mocha --config '.mocha.yml'"
   },
   "author": "Leo Hao <leodinas.hao@gmail.com>",
   "license": "MIT",
