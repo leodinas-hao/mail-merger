@@ -3,7 +3,7 @@ import { assert } from 'chai';
 
 import { MailMerger } from './mail-merger';
 
-@suite('MailMerger Tester')
+@suite('mail-merger.spec')
 class MailMergerTester {
   @pending
   @test('should sent email')

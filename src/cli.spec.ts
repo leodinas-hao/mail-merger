@@ -2,7 +2,7 @@ import { pending, suite, test } from '@testdeck/mocha';
 
 import { cli } from './cli';
 
-@suite('cli tester')
+@suite('cli.spec')
 class CliTester {
   @pending
   @test('should send email from cli')
@@ -20,7 +20,7 @@ class CliTester {
     ]);
   }
 
-  @pending
+  // @pending
   @test('should display help')
   public async help() {
     await cli([
